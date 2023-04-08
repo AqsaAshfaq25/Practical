@@ -17,8 +17,8 @@ ob_start();
 <body>
 <?php
 
-$id = $_GET['id'];
-$getdata = "SELECT * FROM `tasks` WHERE Tid = '$id'";
+$Tid = $_GET['Tid'];
+$getdata = "SELECT * FROM `tasks` WHERE `tasks`.`Tid` = '$Tid'";
 
 $res = mysqli_query($conn, $getdata);
 
@@ -38,11 +38,11 @@ if($res){
             <div id="login-row" class="row justify-content-center align-items-center">
                 <div id="login-column" class="col-md-6">
                     <div id="login-box" class="col-md-12">
-                        <form id="login-form" class="form" action="update.php" method="post">
+                        <form id="login-form" class="form" action="update2.php" method="post">
                             <h3 class="text-center text-info">UPDATE YOUR TASK</h3>
                             <p style="color:red;font-size:small;" class="text-bold"  >
                           <div class="form-group">
-                                <input type="hidden" name="UserID" id="UserID" class="form-control" value="<?php echo $id ?>">
+                                <input type="hidden" name="Tid" id="UserID" class="form-control" value="<?php echo $Tid ?>">
                             </div>
                             <div class="form-group">
                                 <label for="username" class="text-info">TASK NAME</label><br>
@@ -57,7 +57,7 @@ if($res){
                                 <input type="date" name="DueDate" id="password" class="form-control" value="<?php echo $DueDate ?>" required>
                             </div>
                             <div class="form-group text-center">
-                                <input type="submit" name="update" class="btn btn-info btn-md" value="Update Task">
+                                <input type="submit" name="Update" class="btn btn-info btn-md" value="Update Task">
                             </div>
                         </form>
                        
@@ -67,29 +67,28 @@ if($res){
         </div>
     </div>
 
-
   <?php
 
-if (isset($_POST['update'])) {
-    $id = $_POST['UserID'];
+if (isset($_POST['Update'])) {
+    $Tid = $_POST['Tid'];
     $name =  $_POST['TaskName'];
     $description =  $_POST['description'];
     $date =  $_POST['DueDate'];
     $update = "UPDATE tasks SET `name` = '$name' , `description` ='$description' , 
-               `due_date` = '$date' WHERE Tid = '$id'";
+               `due_date` = '$date' WHERE Tid = '$Tid'";
     $updateRes = mysqli_query($conn, $update);
     if ($updateRes) {
         echo"<script>alert('Record Updated!')</script>";
-        echo "<script>window.location.href='task.php?id=$id';</script>";
+        echo "<script>window.location.href='TaskTable.php';</script>";
     } else {
         echo"<script>alert('Updation Failed!')</script>";
-        echo "<script>window.location.href='update.php';</script>";
+        echo "<script>window.location.href='update2.php';</script>";
     }
 }
+
+
+
 ?>
-
-
-
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </body>

@@ -1,22 +1,33 @@
 <?php
 include('config.php');
 session_start();
-if(isset($_POST['ADD'])){
-    $userID = $_POST["UserID"];
+if(isset($_POST['AddTask'])){
+    // $id = $_GET["id"];
     $TaskName=$_POST['TaskName'] ;
     $description=$_POST['description'];
     $DueDate=$_POST['DueDate'];
-    $query="INSERT INTO `tasks`(`name`, `description`, `due_date`) VALUES ('[$TaskName]','[$description]','[$DueDate]')";
-    $data=mysqli_query($conn,$query);
-    $NameCount = mysqli_num_rows($data);
+
+    $validate = "SELECT * FROM `tasks` WHERE `name`='$TaskName'";
+
+    $query = mysqli_query($conn, $validate);
+    $NameCount = mysqli_num_rows($query);
+
     if($NameCount>0){
-        $error="Name Already Exists";
-        echo "<script>alert('Task Is Not Inserted..!')</script>";
-        echo "<script>window.location.href='form.php'</script>";
-    }
-    else{
-        echo "<script>alert('Task Inserted successful')</script>";
-        echo "<script>window.location.href = 'task.php';</script>";
+        $error="Task Name Already Exists";
+    }else{
+            
+        $data = "INSERT INTO `tasks` (`name`, `description`, `due_date`) 
+        VALUES ('$TaskName','$description','$DueDate')";
+
+        $Addquery= mysqli_query($conn, $data);
+
+        if($Addquery){
+                echo "<script>alert('Data Inserted Successfully..')</script>";
+                echo "<script>window.location.href = 'tms.php?id=$id';</script>";
+        }else{
+            echo "<script>alert('Data Is Not Inserted Yet..!')</script>";
+            echo "<script>window.location.href = 'form.php';</script>"; 
+        }
     }
 
 
@@ -54,14 +65,14 @@ if(isset($_POST['ADD'])){
                           ?>
                           </p>
                           <?php
-                          if (isset($_GET['id'])) {
-                            $id= $_GET['id'];
-                            $query = "SELECT * FROM users where userID = '$id'";
-                             $data = mysqli_query($conn, $query);
+                        //   if (isset($_GET['id'])) {
+                        //     $id= $_GET['id'];
+                        //     $query = "SELECT * FROM users where userID = '$id'";
+                        //      $data = mysqli_query($conn, $query);
 
-                             $row = mysqli_fetch_array($data);
+                        //      $row = mysqli_fetch_array($data);
 
-                             if ($row) {
+                        //      if ($row) {
 
                             
                           
@@ -71,23 +82,23 @@ if(isset($_POST['ADD'])){
                             </div>
                             <div class="form-group">
                                 <label for="username" class="text-info">TASK NAME</label><br>
-                                <input type="text" name="TaskName" id="username" class="form-control">
+                                <input type="text" name="TaskName" id="username" class="form-control" required>
                             </div>
                             <div class="form-group">
                                 <label for="password" class="text-info">DESCRIPTION</label><br>
-                                <input type="text" name="description" id="password" class="form-control">
+                                <input type="text" name="description" id="password" class="form-control" required>
                             </div>
                             <div class="form-group mb-4">
                                 <label for="password" class="text-info">DUE DATE</label><br>
-                                <input type="date" name="DueDate" id="password" class="form-control">
+                                <input type="date" name="DueDate" id="password" class="form-control" required>
                             </div>
                             <div class="form-group text-center">
-                                <input type="submit" name="ADD" class="btn btn-info btn-md" value="Add Task">
+                                <input type="submit" name="AddTask" class="btn btn-info btn-md" value="Add Task">
                             </div>
                         </form>
                         <?php
-                           }
-                        }
+                        //    }
+                        // }
                         ?>
                     </div>
                 </div>
